@@ -1,5 +1,6 @@
 package com.cppba.web;
 
+import com.cppba.entity.User;
 import com.cppba.util.CommonUtil;
 import org.beetl.sql.core.SQLManager;
 import org.beetl.sql.ext.spring.SpringBeetlSql;
@@ -10,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,10 +31,18 @@ public class CommonAction {
     public void login(
             HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
+        try {
+            SQLManager sqlManager = beetlsql.getSQLManager();
+            //User user = sqlManager.unique(User.class, 2);
+            //System.out.println(user.toString());
+            Map<String,Object> params = new HashMap<>();
+            //params.put("age",11);
+            List<User> userList = sqlManager.select("user.select", User.class, params);
+            System.out.println(userList);
 
-        SQLManager sqlManager = beetlsql.getSQLManager();
-
-
-        CommonUtil.responseBuildJson("403", "你无权访问该资源!", null, response);
+            CommonUtil.responseBuildJson("403", "你无权访问该资源!", null, response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

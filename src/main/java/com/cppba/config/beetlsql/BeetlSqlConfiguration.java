@@ -4,7 +4,6 @@ import com.alibaba.druid.pool.DruidDataSource;
 import org.beetl.sql.core.ClasspathLoader;
 import org.beetl.sql.core.HumpNameConversion;
 import org.beetl.sql.core.db.MySqlStyle;
-import org.beetl.sql.ext.DebugInterceptor;
 import org.beetl.sql.ext.spring.SpringBeetlSql;
 import org.beetl.sql.ext.spring.SpringConnectionSource;
 import org.springframework.context.annotation.Bean;
@@ -64,9 +63,9 @@ public class BeetlSqlConfiguration {
         springBeetlSql.setSqlLoader(classpathLoader);
         //nc
         springBeetlSql.setNc(new HumpNameConversion());
-        //interceptors
-        DebugInterceptor debugInterceptors[] = {new DebugInterceptor()} ;
-        springBeetlSql.setInterceptors(debugInterceptors);
+        //interceptors(debug调试使用)
+        /*DebugInterceptor debugInterceptors[] = {new DebugInterceptor()} ;
+        springBeetlSql.setInterceptors(debugInterceptors);*/
         return springBeetlSql;
     }
 
