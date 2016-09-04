@@ -4,8 +4,9 @@ import com.alibaba.druid.pool.DruidDataSource;
 import org.beetl.sql.core.ClasspathLoader;
 import org.beetl.sql.core.HumpNameConversion;
 import org.beetl.sql.core.db.MySqlStyle;
-import org.beetl.sql.ext.spring.SpringBeetlSql;
-import org.beetl.sql.ext.spring.SpringConnectionSource;
+import org.beetl.sql.ext.spring4.BeetlSqlDataSource;
+import org.beetl.sql.ext.spring4.BeetlSqlScannerConfigurer;
+import org.beetl.sql.ext.spring4.SqlManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,25 +49,36 @@ public class BeetlSqlConfiguration {
         return druidDataSource;
     }
 
+    //SqlManagerFactoryBean
     @Bean
-    public SpringBeetlSql sqlManager() throws SQLException {
-        SpringBeetlSql springBeetlSql = new SpringBeetlSql();
+    public SqlManagerFactoryBean sqlManagerFactoryBean() throws SQLException {
+        SqlManagerFactoryBean sqlManagerFactoryBean = new SqlManagerFactoryBean();
         //cs
-        SpringConnectionSource springConnectionSource = new SpringConnectionSource();
-        springConnectionSource.setMasterSource(dataSource());
-        springBeetlSql.setCs(springConnectionSource);
+        BeetlSqlDataSource beetlSqlDataSource = new BeetlSqlDataSource();
+        beetlSqlDataSource.setMasterSource(dataSource());
+        sqlManagerFactoryBean.setCs(beetlSqlDataSource);
         //dbStyle
-        springBeetlSql.setDbStyle(new MySqlStyle());
+        sqlManagerFactoryBean.setDbStyle(new MySqlStyle());
         //sqlLoader
         ClasspathLoader classpathLoader = new ClasspathLoader();
         classpathLoader.setSqlRoot("/sql");
-        springBeetlSql.setSqlLoader(classpathLoader);
+        sqlManagerFactoryBean.setSqlLoader(classpathLoader);
         //nc
-        springBeetlSql.setNc(new HumpNameConversion());
+        sqlManagerFactoryBean.setNc(new HumpNameConversion());
         //interceptors(debug调试使用)
         /*DebugInterceptor debugInterceptors[] = {new DebugInterceptor()} ;
-        springBeetlSql.setInterceptors(debugInterceptors);*/
-        return springBeetlSql;
+        sqlManagerFactoryBean.setInterceptors(debugInterceptors);*/
+        return sqlManagerFactoryBean;
+    }
+
+    //Mapper
+    @Bean
+    public BeetlSqlScannerConfigurer beetlSqlScannerConfigurer(){
+        BeetlSqlScannerConfigurer beetlSqlScannerConfigurer = new BeetlSqlScannerConfigurer();
+        beetlSqlScannerConfigurer.setBasePackage("com.cppba");
+        beetlSqlScannerConfigurer.setDaoSuffix("Dao");
+        beetlSqlScannerConfigurer.setSqlManagerFactoryBeanName("sqlManagerFactoryBean");
+        return beetlSqlScannerConfigurer;
     }
 
 }

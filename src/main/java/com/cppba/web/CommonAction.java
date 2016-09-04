@@ -3,7 +3,6 @@ package com.cppba.web;
 import com.cppba.entity.User;
 import com.cppba.util.CommonUtil;
 import org.beetl.sql.core.SQLManager;
-import org.beetl.sql.ext.spring.SpringBeetlSql;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,7 +23,7 @@ import java.util.Map;
 public class CommonAction {
 
     @Resource
-    private SpringBeetlSql beetlsql;
+    private SQLManager  sqlManager;
 
     //返回403错误
     @RequestMapping("/403.htm")
@@ -32,7 +31,6 @@ public class CommonAction {
             HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            SQLManager sqlManager = beetlsql.getSQLManager();
             //User user = sqlManager.unique(User.class, 2);
             //System.out.println(user.toString());
             Map<String,Object> params = new HashMap<>();
@@ -40,9 +38,12 @@ public class CommonAction {
             List<User> userList = sqlManager.select("user.select", User.class, params);
             System.out.println(userList);
 
+            //sqlManager.genPojoCodeToConsole("UserCard");
+            //sqlManager.genSQLTemplateToConsole("UserCard");
             CommonUtil.responseBuildJson("403", "你无权访问该资源!", null, response);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
 }
