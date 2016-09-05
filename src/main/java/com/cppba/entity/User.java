@@ -1,7 +1,9 @@
 package com.cppba.entity;
 
 
-public class User {
+import org.beetl.sql.core.TailBean;
+
+public class User extends TailBean {
     Integer id;
     String name;
     Integer age;
