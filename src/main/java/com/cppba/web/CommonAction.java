@@ -1,9 +1,11 @@
 package com.cppba.web;
 
+import com.cppba.UserDao;
 import com.cppba.entity.Card;
 import com.cppba.entity.User;
 import com.cppba.util.CommonUtil;
 import org.beetl.sql.core.SQLManager;
+import org.beetl.sql.core.engine.PageQuery;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,6 +27,8 @@ public class CommonAction {
 
     @Resource
     private SQLManager  sqlManager;
+    @Resource
+    private UserDao userDao;
 
     //返回403错误
     @RequestMapping("/403.htm")
@@ -32,18 +36,19 @@ public class CommonAction {
             HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            // User user = sqlManager.unique(user.class, 2);
-            //System.out.println(user.toString());
-
-            Map<String,Object> params = new HashMap<>();
-            //params.put("age",11);
-            List<User> userList = sqlManager.select("user.select", User.class, params);
+            PageQuery pageQuery = new PageQuery();
+            List<User> userList = userDao.select(null, null,0,0);
             for (User user : userList) {
                 System.out.println(user);
                 List<Card> cardList = (List<Card>) user.get("card");
                 System.out.println(cardList);
             }
 
+           /* User user = new User();
+            user.setAge(123);
+            user.setName("小明");
+            userDao.insert(user);*/
+            
             //sqlManager.genPojoCodeToConsole("Card");
             //sqlManager.genSQLTemplateToConsole("UserCard");
             CommonUtil.responseBuildJson("403", "你无权访问该资源!", null, response);

@@ -68,7 +68,7 @@ public class BeetlSqlConfiguration {
         sqlManagerFactoryBean.setNc(new HumpNameConversion());
         //interceptors(debug调试使用)
         DebugInterceptor debugInterceptors[] = {new DebugInterceptor()} ;
-        //sqlManagerFactoryBean.setInterceptors(debugInterceptors);
+        sqlManagerFactoryBean.setInterceptors(debugInterceptors);
         return sqlManagerFactoryBean;
     }
 
