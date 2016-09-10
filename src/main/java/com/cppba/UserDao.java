@@ -15,5 +15,7 @@ public interface UserDao  extends BaseMapper<User> {
             @Param("name")Integer name,
             @RowStart int start,
             @RowSize int size);
-    
+
+    public List<User> selectUser(
+            @Param("user")User user);
 }

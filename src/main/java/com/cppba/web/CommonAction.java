@@ -1,7 +1,6 @@
 package com.cppba.web;
 
 import com.cppba.UserDao;
-import com.cppba.entity.Card;
 import com.cppba.entity.User;
 import com.cppba.util.CommonUtil;
 import org.beetl.sql.core.SQLManager;
@@ -37,11 +36,18 @@ public class CommonAction {
         Map<String, Object> map = new HashMap<String, Object>();
         try {
             PageQuery pageQuery = new PageQuery();
-            List<User> userList = userDao.select(null, null,0,0);
+            /*List<User> userList = userDao.select(null, null,0,0);
             for (User user : userList) {
                 System.out.println(user);
                 List<Card> cardList = (List<Card>) user.get("card");
                 System.out.println(cardList);
+            }*/
+
+            User user = new User();
+            user.setAge(11);
+            List<User> userList = userDao.selectUser(user);
+            for (User u : userList) {
+                System.out.println(u);
             }
 
            /* User user = new User();
